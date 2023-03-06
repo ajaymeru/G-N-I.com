@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Web Page</title>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" style="float:left; height:100px;">
+    <img src="{{ url_for('static', filename='images/uni.jpg') }}" alt="University" style="display:block; margin:auto; height:100px;">
+    
+    <nav style="text-align:center;">
+        <ul style="display:inline-block;">
+            <li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('home') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Home</a></li>
+            <li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('analysis') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Analysis</a></li>
+            <li style="display:inline-block;"><a href="{{ url_for('contact') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Contact Us</a></li>
+        </ul>
+    </nav>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 80%;
+                 height: 750px;
+                 background-color: white;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 80%;
+                 height: 750px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g53260", "label": "LOC_Os01g53260", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g02450", "label": "LOC_Os05g02450", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g35910", "label": "LOC_Os09g35910", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g32450", "label": "LOC_Os02g32450", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g42585", "label": "LOC_Os02g42585", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g68290", "label": "LOC_Os01g68290", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g52780", "label": "LOC_Os02g52780", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g16350", "label": "LOC_Os03g16350", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g38720", "label": "LOC_Os04g38720", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g05360", "label": "LOC_Os12g05360", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g51670", "label": "LOC_Os02g51670", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g04590", "label": "LOC_Os01g04590", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g60430", "label": "LOC_Os03g60430", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g05830", "label": "LOC_Os01g05830", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g06310", "label": "LOC_Os01g06310", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g01380", "label": "LOC_Os02g01380", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g11600", "label": "LOC_Os01g11600", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g50770", "label": "LOC_Os04g50770", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g18220", "label": "LOC_Os01g18220", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g07974", "label": "LOC_Os07g07974", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g20030", "label": "LOC_Os01g20030", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g24480", "label": "LOC_Os01g24480", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g10080", "label": "LOC_Os02g10080", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g29330", "label": "LOC_Os01g29330", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g09170", "label": "LOC_Os03g09170", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g50622", "label": "LOC_Os01g50622", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g66120", "label": "LOC_Os01g66120", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g52830", "label": "LOC_Os01g52830", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g58250", "label": "LOC_Os03g58250", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g54090", "label": "LOC_Os01g54090", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g24070", "label": "LOC_Os06g24070", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g58800", "label": "LOC_Os01g58800", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g12440", "label": "LOC_Os01g12440", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g62770", "label": "LOC_Os01g62770", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g46870", "label": "LOC_Os01g46870", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g62980", "label": "LOC_Os01g62980", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g43820", "label": "LOC_Os02g43820", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g68570", "label": "LOC_Os01g68570", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g32790", "label": "LOC_Os04g32790", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g70500", "label": "LOC_Os01g70500", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g57340", "label": "LOC_Os04g57340", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os01g72210", "label": "LOC_Os01g72210", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g47330", "label": "LOC_Os07g47330", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g09050", "label": "LOC_Os02g09050", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g69980", "label": "LOC_Os01g69980", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g15860", "label": "LOC_Os02g15860", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g51280", "label": "LOC_Os02g51280", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g15930", "label": "LOC_Os02g15930", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g12230", "label": "LOC_Os06g12230", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g26470", "label": "LOC_Os02g26470", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os08g45110", "label": "LOC_Os08g45110", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g31840", "label": "LOC_Os02g31840", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g39320", "label": "LOC_Os07g39320", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g37480", "label": "LOC_Os02g37480", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g07120", "label": "LOC_Os01g07120", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g37834", "label": "LOC_Os02g37834", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os05g03020", "label": "LOC_Os05g03020", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g41840", "label": "LOC_Os02g41840", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g08440", "label": "LOC_Os02g08440", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g46180", "label": "LOC_Os02g46180", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g04010", "label": "LOC_Os06g04010", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g46473", "label": "LOC_Os02g46473", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g11550", "label": "LOC_Os01g11550", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g48320", "label": "LOC_Os02g48320", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g19694", "label": "LOC_Os01g19694", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os02g56500", "label": "LOC_Os02g56500", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g21800", "label": "LOC_Os03g21800", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g04080", "label": "LOC_Os03g04080", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os12g06520", "label": "LOC_Os12g06520", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g08580", "label": "LOC_Os03g08580", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g46030", "label": "LOC_Os02g46030", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g10150", "label": "LOC_Os03g10150", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g07480", "label": "LOC_Os01g07480", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g10320", "label": "LOC_Os03g10320", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g64000", "label": "LOC_Os01g64000", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g12860", "label": "LOC_Os03g12860", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g66030", "label": "LOC_Os01g66030", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g15920", "label": "LOC_Os03g15920", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os05g41070", "label": "LOC_Os05g41070", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g16780", "label": "LOC_Os03g16780", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g13260", "label": "LOC_Os07g13260", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g16960", "label": "LOC_Os03g16960", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os12g01490", "label": "LOC_Os12g01490", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g17350", "label": "LOC_Os03g17350", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os12g13170", "label": "LOC_Os12g13170", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g26490", "label": "LOC_Os03g26490", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g09640", "label": "LOC_Os01g09640", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g29540", "label": "LOC_Os03g29540", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g62410", "label": "LOC_Os01g62410", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g40725", "label": "LOC_Os03g40725", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os10g41200", "label": "LOC_Os10g41200", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g42600", "label": "LOC_Os03g42600", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g65080", "label": "LOC_Os01g65080", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g45210", "label": "LOC_Os03g45210", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g34060", "label": "LOC_Os09g34060", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g55776", "label": "LOC_Os03g55776", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g09850", "label": "LOC_Os01g09850", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g55840", "label": "LOC_Os03g55840", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g66590", "label": "LOC_Os01g66590", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g60220", "label": "LOC_Os03g60220", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g38340", "label": "LOC_Os09g38340", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os03g60760", "label": "LOC_Os03g60760", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g47150", "label": "LOC_Os06g47150", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g08415", "label": "LOC_Os04g08415", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os08g44830", "label": "LOC_Os08g44830", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g34560", "label": "LOC_Os04g34560", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os05g41760", "label": "LOC_Os05g41760", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g37880", "label": "LOC_Os04g37880", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g09390", "label": "LOC_Os06g09390", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g47140", "label": "LOC_Os04g47140", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g28440", "label": "LOC_Os09g28440", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g49370", "label": "LOC_Os04g49370", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g14440", "label": "LOC_Os01g14440", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os04g57739", "label": "LOC_Os04g57739", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g47560", "label": "LOC_Os01g47560", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g02200", "label": "LOC_Os05g02200", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g54600", "label": "LOC_Os01g54600", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g05060", "label": "LOC_Os05g05060", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g09100", "label": "LOC_Os03g09100", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g23398", "label": "LOC_Os05g23398", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g55080", "label": "LOC_Os03g55080", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g23440", "label": "LOC_Os05g23440", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g02060", "label": "LOC_Os07g02060", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g28830", "label": "LOC_Os05g28830", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g39480", "label": "LOC_Os07g39480", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os05g41620", "label": "LOC_Os05g41620", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os11g29870", "label": "LOC_Os11g29870", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g02630", "label": "LOC_Os06g02630", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os08g33150", "label": "LOC_Os08g33150", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g04240", "label": "LOC_Os06g04240", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g48350", "label": "LOC_Os04g48350", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g07820", "label": "LOC_Os06g07820", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g35790", "label": "LOC_Os09g35790", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g11980", "label": "LOC_Os06g11980", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os10g28340", "label": "LOC_Os10g28340", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g16160", "label": "LOC_Os06g16160", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g15340", "label": "LOC_Os02g15340", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g30820", "label": "LOC_Os06g30820", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g40930", "label": "LOC_Os04g40930", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g36390", "label": "LOC_Os06g36390", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os12g39400", "label": "LOC_Os12g39400", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g36940", "label": "LOC_Os06g36940", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g35900", "label": "LOC_Os06g35900", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os06g38830", "label": "LOC_Os06g38830", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g21060", "label": "LOC_Os03g21060", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os07g33280", "label": "LOC_Os07g33280", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g28090", "label": "LOC_Os04g28090", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os07g37700", "label": "LOC_Os07g37700", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g03720", "label": "LOC_Os01g03720", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os07g40890", "label": "LOC_Os07g40890", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g56580", "label": "LOC_Os03g56580", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os07g42220", "label": "LOC_Os07g42220", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g43090", "label": "LOC_Os06g43090", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os07g42650", "label": "LOC_Os07g42650", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g01960", "label": "LOC_Os09g01960", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g01370", "label": "LOC_Os08g01370", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os12g18150", "label": "LOC_Os12g18150", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g04430", "label": "LOC_Os08g04430", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g49830", "label": "LOC_Os01g49830", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g18974", "label": "LOC_Os08g18974", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g74540", "label": "LOC_Os01g74540", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g24200", "label": "LOC_Os08g24200", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g42570", "label": "LOC_Os04g42570", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g24300", "label": "LOC_Os08g24300", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g68370", "label": "LOC_Os01g68370", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g34390", "label": "LOC_Os08g34390", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g31470", "label": "LOC_Os07g31470", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os08g37104", "label": "LOC_Os08g37104", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g49040", "label": "LOC_Os06g49040", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g10010", "label": "LOC_Os09g10010", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g11780", "label": "LOC_Os06g11780", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g10620", "label": "LOC_Os09g10620", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g30774", "label": "LOC_Os07g30774", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g16760", "label": "LOC_Os09g16760", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g54474", "label": "LOC_Os04g54474", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g19970", "label": "LOC_Os09g19970", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g51154", "label": "LOC_Os01g51154", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g20930", "label": "LOC_Os09g20930", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os04g55520", "label": "LOC_Os04g55520", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g23595", "label": "LOC_Os09g23595", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g09550", "label": "LOC_Os01g09550", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os09g32470", "label": "LOC_Os09g32470", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os07g43030", "label": "LOC_Os07g43030", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os10g25060", "label": "LOC_Os10g25060", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g70270", "label": "LOC_Os01g70270", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os10g26720", "label": "LOC_Os10g26720", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g54210", "label": "LOC_Os01g54210", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os10g28680", "label": "LOC_Os10g28680", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os06g49830", "label": "LOC_Os06g49830", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os10g39100", "label": "LOC_Os10g39100", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g20780", "label": "LOC_Os03g20780", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os11g07911", "label": "LOC_Os11g07911", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g20790", "label": "LOC_Os03g20790", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os11g10470", "label": "LOC_Os11g10470", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g67770", "label": "LOC_Os01g67770", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os11g29780", "label": "LOC_Os11g29780", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g22020", "label": "LOC_Os02g22020", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os11g41600", "label": "LOC_Os11g41600", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os03g21030", "label": "LOC_Os03g21030", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os11g43790", "label": "LOC_Os11g43790", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os09g32260", "label": "LOC_Os09g32260", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g12880", "label": "LOC_Os12g12880", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os01g48060", "label": "LOC_Os01g48060", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g13910", "label": "LOC_Os12g13910", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "LOC_Os02g45420", "label": "LOC_Os02g45420", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32610", "label": "LOC_Os12g32610", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "A", "label": "A", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32611", "label": "LOC_Os12g32611", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "B", "label": "B", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32612", "label": "LOC_Os12g32612", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32613", "label": "LOC_Os12g32613", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32614", "label": "LOC_Os12g32614", "shape": "dot"}, {"color": "#03DAC6", "font": {"color": "black"}, "id": "C", "label": "C", "shape": "dot"}, {"color": "#da03b3", "font": {"color": "black"}, "id": "LOC_Os12g32615", "label": "LOC_Os12g32615", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"color": "#018786", "from": "LOC_Os01g53260", "to": "LOC_Os05g02450"}, {"color": "#018786", "from": "LOC_Os09g35910", "to": "LOC_Os02g32450"}, {"color": "#018786", "from": "LOC_Os02g42585", "to": "LOC_Os01g68290"}, {"color": "#018786", "from": "LOC_Os02g52780", "to": "LOC_Os03g16350"}, {"color": "#018786", "from": "LOC_Os04g38720", "to": "LOC_Os12g05360"}, {"color": "#018786", "from": "LOC_Os02g51670", "to": "LOC_Os01g04590"}, {"color": "#018786", "from": "LOC_Os03g60430", "to": "LOC_Os01g05830"}, {"color": "#018786", "from": "LOC_Os02g42585", "to": "LOC_Os01g06310"}, {"color": "#018786", "from": "LOC_Os02g01380", "to": "LOC_Os01g11600"}, {"color": "#018786", "from": "LOC_Os04g50770", "to": "LOC_Os01g18220"}, {"color": "#018786", "from": "LOC_Os07g07974", "to": "LOC_Os01g20030"}, {"color": "#018786", "from": "LOC_Os02g42585", "to": "LOC_Os01g24480"}, {"color": "#018786", "from": "LOC_Os02g10080", "to": "LOC_Os01g29330"}, {"color": "#018786", "from": "LOC_Os03g09170", "to": "LOC_Os01g50622"}, {"color": "#018786", "from": "LOC_Os01g66120", "to": "LOC_Os01g52830"}, {"color": "#018786", "from": "LOC_Os03g58250", "to": "LOC_Os01g54090"}, {"color": "#018786", "from": "LOC_Os06g24070", "to": "LOC_Os01g58800"}, {"color": "#018786", "from": "LOC_Os01g12440", "to": "LOC_Os01g62770"}, {"color": "#018786", "from": "LOC_Os01g46870", "to": "LOC_Os01g62980"}, {"color": "#018786", "from": "LOC_Os02g43820", "to": "LOC_Os01g68570"}, {"color": "#018786", "from": "LOC_Os04g32790", "to": "LOC_Os01g70500"}, {"color": "#018786", "from": "LOC_Os04g57340", "to": "LOC_Os01g72210"}, {"color": "#018786", "from": "LOC_Os07g47330", "to": "LOC_Os02g09050"}, {"color": "#018786", "from": "LOC_Os01g69980", "to": "LOC_Os02g15860"}, {"color": "#018786", "from": "LOC_Os02g51280", "to": "LOC_Os02g15930"}, {"color": "#018786", "from": "LOC_Os06g12230", "to": "LOC_Os02g26470"}, {"color": "#018786", "from": "LOC_Os08g45110", "to": "LOC_Os02g31840"}, {"color": "#018786", "from": "LOC_Os07g39320", "to": "LOC_Os02g37480"}, {"color": "#018786", "from": "LOC_Os01g07120", "to": "LOC_Os02g37834"}, {"color": "#018786", "from": "LOC_Os05g03020", "to": "LOC_Os02g41840"}, {"color": "#018786", "from": "LOC_Os02g08440", "to": "LOC_Os02g46180"}, {"color": "#018786", "from": "LOC_Os06g04010", "to": "LOC_Os02g46473"}, {"color": "#018786", "from": "LOC_Os01g11550", "to": "LOC_Os02g48320"}, {"color": "#018786", "from": "LOC_Os01g19694", "to": "LOC_Os02g56500"}, {"color": "#018786", "from": "LOC_Os03g21800", "to": "LOC_Os03g04080"}, {"color": "#018786", "from": "LOC_Os12g06520", "to": "LOC_Os03g08580"}, {"color": "#018786", "from": "LOC_Os02g46030", "to": "LOC_Os03g10150"}, {"color": "#018786", "from": "LOC_Os01g07480", "to": "LOC_Os03g10320"}, {"color": "#018786", "from": "LOC_Os01g64000", "to": "LOC_Os03g12860"}, {"color": "#018786", "from": "LOC_Os01g66030", "to": "LOC_Os03g15920"}, {"color": "#018786", "from": "LOC_Os05g41070", "to": "LOC_Os03g16780"}, {"color": "#018786", "from": "LOC_Os07g13260", "to": "LOC_Os03g16960"}, {"color": "#018786", "from": "LOC_Os12g01490", "to": "LOC_Os03g17350"}, {"color": "#018786", "from": "LOC_Os12g13170", "to": "LOC_Os03g26490"}, {"color": "#018786", "from": "LOC_Os01g09640", "to": "LOC_Os03g29540"}, {"color": "#018786", "from": "LOC_Os01g62410", "to": "LOC_Os03g40725"}, {"color": "#018786", "from": "LOC_Os10g41200", "to": "LOC_Os03g42600"}, {"color": "#018786", "from": "LOC_Os01g65080", "to": "LOC_Os03g45210"}, {"color": "#018786", "from": "LOC_Os09g34060", "to": "LOC_Os03g55776"}, {"color": "#018786", "from": "LOC_Os01g09850", "to": "LOC_Os03g55840"}, {"color": "#018786", "from": "LOC_Os01g66590", "to": "LOC_Os03g60220"}, {"color": "#018786", "from": "LOC_Os09g38340", "to": "LOC_Os03g60760"}, {"color": "#018786", "from": "LOC_Os06g47150", "to": "LOC_Os04g08415"}, {"color": "#018786", "from": "LOC_Os08g44830", "to": "LOC_Os04g34560"}, {"color": "#018786", "from": "LOC_Os05g41760", "to": "LOC_Os04g37880"}, {"color": "#018786", "from": "LOC_Os06g09390", "to": "LOC_Os04g47140"}, {"color": "#018786", "from": "LOC_Os09g28440", "to": "LOC_Os04g49370"}, {"color": "#018786", "from": "LOC_Os01g14440", "to": "LOC_Os04g57739"}, {"color": "#018786", "from": "LOC_Os01g47560", "to": "LOC_Os05g02200"}, {"color": "#018786", "from": "LOC_Os01g54600", "to": "LOC_Os05g05060"}, {"color": "#018786", "from": "LOC_Os03g09100", "to": "LOC_Os05g23398"}, {"color": "#018786", "from": "LOC_Os03g55080", "to": "LOC_Os05g23440"}, {"color": "#018786", "from": "LOC_Os07g02060", "to": "LOC_Os05g28830"}, {"color": "#018786", "from": "LOC_Os07g39480", "to": "LOC_Os05g41620"}, {"color": "#018786", "from": "LOC_Os11g29870", "to": "LOC_Os06g02630"}, {"color": "#018786", "from": "LOC_Os08g33150", "to": "LOC_Os06g04240"}, {"color": "#018786", "from": "LOC_Os04g48350", "to": "LOC_Os06g07820"}, {"color": "#018786", "from": "LOC_Os09g35790", "to": "LOC_Os06g11980"}, {"color": "#018786", "from": "LOC_Os10g28340", "to": "LOC_Os06g16160"}, {"color": "#018786", "from": "LOC_Os02g15340", "to": "LOC_Os06g30820"}, {"color": "#018786", "from": "LOC_Os04g40930", "to": "LOC_Os06g36390"}, {"color": "#018786", "from": "LOC_Os12g39400", "to": "LOC_Os06g36940"}, {"color": "#018786", "from": "LOC_Os06g35900", "to": "LOC_Os06g38830"}, {"color": "#018786", "from": "LOC_Os03g21060", "to": "LOC_Os07g33280"}, {"color": "#018786", "from": "LOC_Os04g28090", "to": "LOC_Os07g37700"}, {"color": "#018786", "from": "LOC_Os01g03720", "to": "LOC_Os07g40890"}, {"color": "#018786", "from": "LOC_Os03g56580", "to": "LOC_Os07g42220"}, {"color": "#018786", "from": "LOC_Os06g43090", "to": "LOC_Os07g42650"}, {"color": "#018786", "from": "LOC_Os09g01960", "to": "LOC_Os08g01370"}, {"color": "#018786", "from": "LOC_Os12g18150", "to": "LOC_Os08g04430"}, {"color": "#018786", "from": "LOC_Os01g49830", "to": "LOC_Os08g18974"}, {"color": "#018786", "from": "LOC_Os01g74540", "to": "LOC_Os08g24200"}, {"color": "#018786", "from": "LOC_Os04g42570", "to": "LOC_Os08g24300"}, {"color": "#018786", "from": "LOC_Os01g68370", "to": "LOC_Os08g34390"}, {"color": "#018786", "from": "LOC_Os07g31470", "to": "LOC_Os08g37104"}, {"color": "#018786", "from": "LOC_Os06g49040", "to": "LOC_Os09g10010"}, {"color": "#018786", "from": "LOC_Os06g11780", "to": "LOC_Os09g10620"}, {"color": "#018786", "from": "LOC_Os07g30774", "to": "LOC_Os09g16760"}, {"color": "#018786", "from": "LOC_Os04g54474", "to": "LOC_Os09g19970"}, {"color": "#018786", "from": "LOC_Os01g51154", "to": "LOC_Os09g20930"}, {"color": "#018786", "from": "LOC_Os04g55520", "to": "LOC_Os09g23595"}, {"color": "#018786", "from": "LOC_Os01g09550", "to": "LOC_Os09g32470"}, {"color": "#018786", "from": "LOC_Os07g43030", "to": "LOC_Os10g25060"}, {"color": "#018786", "from": "LOC_Os01g70270", "to": "LOC_Os10g26720"}, {"color": "#018786", "from": "LOC_Os01g54210", "to": "LOC_Os10g28680"}, {"color": "#018786", "from": "LOC_Os06g49830", "to": "LOC_Os10g39100"}, {"color": "#018786", "from": "LOC_Os03g20780", "to": "LOC_Os11g07911"}, {"color": "#018786", "from": "LOC_Os03g20790", "to": "LOC_Os11g10470"}, {"color": "#018786", "from": "LOC_Os01g67770", "to": "LOC_Os11g29780"}, {"color": "#018786", "from": "LOC_Os02g22020", "to": "LOC_Os11g41600"}, {"color": "#018786", "from": "LOC_Os03g21030", "to": "LOC_Os11g43790"}, {"color": "#018786", "from": "LOC_Os09g32260", "to": "LOC_Os12g12880"}, {"color": "#018786", "from": "LOC_Os01g48060", "to": "LOC_Os12g13910"}, {"color": "#018786", "from": "LOC_Os02g45420", "to": "LOC_Os12g32610"}, {"color": "#018786", "from": "A", "to": "LOC_Os12g32611"}, {"color": "#018786", "from": "B", "to": "LOC_Os12g32612"}, {"color": "#018786", "from": "A", "to": "LOC_Os12g32613"}, {"color": "#018786", "from": "B", "to": "LOC_Os12g32614"}, {"color": "#018786", "from": "C", "to": "LOC_Os12g32615"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

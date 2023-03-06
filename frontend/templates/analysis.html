@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Web Page</title>
+    <style>
+        .card {
+            width: 300px;
+            height: 400px;
+            padding: 20px;
+            margin: 20px;
+            border: 1px solid black;
+        }
+        .card img {
+            width: 100%;
+            height: 250px;
+        }
+        .card h3 {
+            font-size: 24px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .card p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .card button {
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" style="float:left; height:100px;">
+    <img src="{{ url_for('static', filename='images/uni.jpg') }}" alt="University" style="display:block; margin:auto; height:100px;">
+    
+    <nav style="text-align:center;">
+        <ul style="display:inline-block;">
+            <li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('home') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Home</a></li>
+            <li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('analysis') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Analysis</a></li>
+            <li style="display:inline-block;"><a href="{{ url_for('contact') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap;">
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Card Image">
+            <h3>Gene Information</h3>
+            <p>The customer is very important, the customer will be followed by the customer. But as well as the developer or the actual performance. But now he is at home.</p>
+            <a href="http://127.0.0.1:9000/"><button>Click Here</button></a>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Card Image">
+            <h3>Network</h3>
+            <p>The customer is very important, the customer will be followed by the customer. But as well as the developer or the actual performance. But now he is at home.</p>
+            <a href="{{ url_for('output') }}"><button>Click Here</button></a>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/image3.jpg') }}" alt="Card Image">
+            <h3>Interconnection of Genes</h3>
+            <p>The customer is very important, the customer will be followed by the customer. But as well as the developer or the actual performance. But now he is at home.</p>
+            <a href="http://127.0.0.1:8000/"><button>Click Here</button></a>
+        </div>
+    </div>
+
+</body>
+</html>

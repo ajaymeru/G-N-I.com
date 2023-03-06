@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+</head>
+<body>
+	<img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" style="float:left; height:100px;">
+	<img src="{{ url_for('static', filename='images/uni.jpg') }}" alt="University" style="display:block; margin:auto; height:100px;">
+	
+	<nav style="text-align:center;">
+		<ul style="display:inline-block;">
+			<li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('home') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Home</a></li>
+			<li style="display:inline-block; margin-right: 300px;"><a href="{{ url_for('analysis') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Analysis</a></li>
+			<li style="display:inline-block;"><a href="{{ url_for('contact') }}" style="font-size:30px; font-weight:bold; text-decoration:none; color:black;">Contact Us</a></li>
+		</ul>
+	</nav>
+</body>
+</html>
